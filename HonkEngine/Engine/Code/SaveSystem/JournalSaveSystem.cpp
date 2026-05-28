@@ -4,6 +4,7 @@
 #include "../Dialogue/tinyxml2.h"
 #include <iostream>
 
+
 using namespace tinyxml2;
 
 bool JournalSaveSystem::SaveJournalData(const std::string &filepath)

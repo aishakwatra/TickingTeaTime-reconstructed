@@ -12,6 +12,7 @@
     <ClCompile Include="Code\Text\TextRenderer.cpp" />
     <ClCompile Include="External\Include\glad\glad.c" />
     <ClCompile Include="Code\SaveSystem\JournalSaveSystem.cpp" />
+    <ClCompile Include="Code\GameObjects\JournalData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Audio\AudioManager.h" />
