@@ -18,6 +18,7 @@
 #include "Renderer/Renderer.h"
 #include "Camera/Camera.h"
 #include "Audio/AudioManager.h"
+#include "SaveSystem/JournalSaveSystem.h"
 #include "stb_image.h"
 
 

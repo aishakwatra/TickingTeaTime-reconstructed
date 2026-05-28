@@ -149,6 +149,7 @@ xcopy /e /i /y "$(ProjectDir)..\Engine\Assets" "$(OutDir)Assets\"
     <ClCompile Include="Code\Input\Input.cpp" />
     <ClCompile Include="Code\Main.cpp" />
     <ClCompile Include="Code\Renderer\Renderer.cpp" />
+    <ClCompile Include="Code\SaveSystem\JournalSaveSystem.cpp" />
     <ClCompile Include="Code\Text\TextRenderer.cpp" />
     <ClCompile Include="External\Include\glad\glad.c" />
   </ItemGroup>
@@ -193,6 +194,7 @@ xcopy /e /i /y "$(ProjectDir)..\Engine\Assets" "$(OutDir)Assets\"
     <ClInclude Include="Code\PopupWidget\PauseMenu.h" />
     <ClInclude Include="Code\PopupWidget\PopUp.h" />
     <ClInclude Include="Code\PopupWidget\SubmitMenu.h" />
+    <ClInclude Include="Code\SaveSystem\JournalSaveSystem.h" />
     <ClInclude Include="Code\Scene\BeforeEndCutscene.h" />
     <ClInclude Include="Code\Scene\EndCredit.h" />
     <ClInclude Include="Code\Scene\EndScene.h" />

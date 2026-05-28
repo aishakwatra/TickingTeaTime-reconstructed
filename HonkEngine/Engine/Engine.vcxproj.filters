@@ -11,6 +11,7 @@
     <ClCompile Include="Code\Renderer\Renderer.cpp" />
     <ClCompile Include="Code\Text\TextRenderer.cpp" />
     <ClCompile Include="External\Include\glad\glad.c" />
+    <ClCompile Include="Code\SaveSystem\JournalSaveSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Audio\AudioManager.h" />
@@ -90,6 +91,7 @@
     <ClInclude Include="Code\GameObjects\BellSoundClue.h" />
     <ClInclude Include="Code\UI\UIAnimated.h" />
     <ClInclude Include="Code\GameObjects\BellSoundClueManager.h" />
+    <ClInclude Include="Code\SaveSystem\JournalSaveSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\Library\freetype.lib" />
