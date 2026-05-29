@@ -400,6 +400,26 @@ public:
 
 	}
 
+	void ResetPage() override
+    {
+        // 1. Run the base function first in case you use standard element vectors
+        Page::ResetPage();
+
+        // 2. Grab the live loaded data
+        MainPageData &data = JournalData::GetInstance()->GetMainPageData();
+
+        // 3. FORCE YOUR MAIN PAGE VISUALS TO MATCH THE LOADED ENUMS HERE
+        // (Example: Update your checkboxes or set button strings based on data values)
+        /*
+        if (data.player_Spy == CABIN1) {
+            spyCheckboxCabin1->setActiveStatus(true);
+        }
+
+        spySelectionButton->SetButtonText(ConvertCabinEnumToString(data.player_Spy));
+        bombLocationButton->SetButtonText(ConvertLocationEnumToString(data.player_BombLocation));
+        */
+    }
+
 
 private:
 

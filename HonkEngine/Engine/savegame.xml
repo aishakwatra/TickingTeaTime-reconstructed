@@ -8,12 +8,53 @@
     </Progression>
     <Journal>
         <MainPage>
-            <PlayerSpy>5</PlayerSpy>
-            <BombLocation>4</BombLocation>
+            <PlayerSpy>4</PlayerSpy>
+            <BombLocation>3</BombLocation>
             <PlayerEvidence>0</PlayerEvidence>
         </MainPage>
-        <ClueStates/>
-        <ActiveEvidence/>
+        <ClueStates>
+            <Cabin id="0">
+                <Clue index="0">true</Clue>
+                <Clue index="1">true</Clue>
+                <Clue index="2">true</Clue>
+                <Clue index="3">true</Clue>
+                <Clue index="4">true</Clue>
+                <Clue index="5">true</Clue>
+                <Clue index="6">true</Clue>
+            </Cabin>
+            <Cabin id="1">
+                <Clue index="0">true</Clue>
+                <Clue index="1">true</Clue>
+                <Clue index="2">true</Clue>
+                <Clue index="3">true</Clue>
+                <Clue index="4">true</Clue>
+                <Clue index="5">true</Clue>
+                <Clue index="6">true</Clue>
+            </Cabin>
+            <Cabin id="4">
+                <Clue index="0">true</Clue>
+                <Clue index="1">true</Clue>
+                <Clue index="2">true</Clue>
+                <Clue index="3">true</Clue>
+                <Clue index="4">true</Clue>
+                <Clue index="5">true</Clue>
+                <Clue index="6">true</Clue>
+            </Cabin>
+        </ClueStates>
+        <ActiveEvidence>
+            <Cabin id="0">
+                <Evidence>Significant other is a Westsider</Evidence>
+                <Evidence>Exchange letters with someone on Westside</Evidence>
+            </Cabin>
+            <Cabin id="1">
+                <Evidence>Moving to Westside but possess no luggage</Evidence>
+                <Evidence>Met his sister at National Day Event</Evidence>
+            </Cabin>
+            <Cabin id="4">
+                <Evidence>Opera singer, travelling between East and West</Evidence>
+                <Evidence>The cult obsessively dedicated to Westside</Evidence>
+            </Cabin>
+        </ActiveEvidence>
         <BookStatus>
             <BookClue index="0">false</BookClue>
             <BookClue index="1">false</BookClue>

@@ -421,6 +421,15 @@ public:
         player->LoadPosition();
         JournalSaveSystem::GetInstance().LoadJournalMainPage();
         JournalSaveSystem::GetInstance().LoadJournalClues();
+    
+
+        // ====== ADD THIS CRITICAL LINE HERE ======
+        if (Journal != nullptr)
+        {
+            Journal->RefreshJournalUI();
+        }
+
+    
 
 
 		entering = false;

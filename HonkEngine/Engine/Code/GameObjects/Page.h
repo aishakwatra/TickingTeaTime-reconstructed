@@ -118,16 +118,50 @@ public:
 
 	}
 
-	void ResetPage() {
+	virtual void ResetPage()
+    {
 
-		for (auto& object : deffered_m_gameObjects) {
-			if (object->gameObj) { //checks for nullptr
-				object->showObject = false;
-				object->gameObj->setActiveStatus(false);
-			}
-		}
+        // 1. Synchronize all deferred graphical game objects (checkmarks, stamps, images)
+        for (size_t i = 0; i < deffered_m_gameObjects.size(); ++i)
+        {
+            if (deffered_m_gameObjects[i] && deffered_m_gameObjects[i]->gameObj)
+            {
 
-	}
+                // Ask JournalData if this specific indexed clue for this cabin is unlocked
+                bool isClueUnlocked = m_journalData->GetClueState(cabinType, static_cast<int>(i));
+
+                // Synchronize the render visibility flag
+                deffered_m_gameObjects[i]->showObject = isClueUnlocked;
+
+                // Match the core engine active status with whether the page itself is currently open
+                if (this->active && isClueUnlocked)
+                {
+                    deffered_m_gameObjects[i]->gameObj->setActiveStatus(true);
+                }
+                else
+                {
+                    deffered_m_gameObjects[i]->gameObj->setActiveStatus(false);
+                }
+            }
+        }
+
+        // 2. Synchronize your Text clues active status fields if necessary
+        for (size_t i = 0; i < textClues.size(); ++i)
+        {
+            if (textClues[i])
+            {
+                bool isClueUnlocked = m_journalData->GetClueState(cabinType, static_cast<int>(i));
+                if (this->active && isClueUnlocked)
+                {
+                    textClues[i]->setActiveStatus(true);
+                }
+                else
+                {
+                    textClues[i]->setActiveStatus(false);
+                }
+            }
+        }
+    }
 
 
 protected:

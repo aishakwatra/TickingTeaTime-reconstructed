@@ -399,6 +399,40 @@ public:
 		}
 	}
 
+	void RefreshJournalUI()
+    {
+        // 1. Force every sub-page to look at the freshly loaded JournalData and rebuild its visuals
+        for (auto &page : allPages)
+        {
+            if (page != nullptr)
+            {
+                page->ResetPage(); // Re-runs the logic matching textures with data states
+            }
+        }
+
+        // 2. Synchronize your loose draggable book elements right away
+        for (size_t i = 0; i < draggableClues.size(); i++)
+        {
+            if (m_journal != nullptr && i < 2)
+            {
+                bool isUnlocked = m_journal->getBookClueState(static_cast<int>(i));
+                draggableClues[i]->setActiveStatus(isUnlocked);
+            }
+        }
+
+        // 3. Synchronize notification icons instantly based on loaded unread clues
+        if (m_journal != nullptr && updateIcons.size() >= 5)
+        {
+            updateIcons[0]->setActiveStatus(m_journal->UnopenedClueStatus(CABIN1));
+            updateIcons[1]->setActiveStatus(m_journal->UnopenedClueStatus(CABIN21));
+            updateIcons[2]->setActiveStatus(m_journal->UnopenedClueStatus(CABIN22));
+            updateIcons[3]->setActiveStatus(m_journal->UnopenedClueStatus(CABIN3));
+            updateIcons[4]->setActiveStatus(m_journal->UnopenedClueStatus(CABIN4));
+        }
+
+        std::cout << "Journal UI layers synchronized with loaded save state!" << std::endl;
+    }
+
 
 
 protected:
