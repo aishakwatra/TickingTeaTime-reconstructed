@@ -180,6 +180,9 @@ public:
 
 		player = new Player("waiter", "Assets/Images/Waiter_Sprite_Walk.png", 4, 8, Journal,PLAYER_SPEED);
 
+		// Load postion from XML
+        player->LoadPosition();
+
 		/*-------------------------------------------------------------💬CREATE TEXT💬------------------------------------------------------------------------------------------------------- */
 
 		

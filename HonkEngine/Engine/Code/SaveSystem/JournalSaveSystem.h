@@ -17,6 +17,8 @@ public:
     // Reads back the tag hierarchy and restores state
     bool LoadJournalData(const std::string &filepath = "savegame.xml");
 
+    float GetSavedPlayerX(const std::string &filepath = "savegame.xml");
+
 private:
     // Private constructor/destructor for Singleton design pattern
     JournalSaveSystem() = default;

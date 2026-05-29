@@ -279,3 +279,33 @@ bool JournalSaveSystem::LoadJournalData(const std::string &filepath)
     journal->NotifyObservers();
     return true;
 }
+
+float JournalSaveSystem::GetSavedPlayerX(const std::string &filepath)
+{
+    tinyxml2::XMLDocument doc;
+
+    // If the file fails to load or doesn't exist, return -5.0f (your default!)
+    if (doc.LoadFile(filepath.c_str()) != tinyxml2::XML_SUCCESS)
+    {
+        return -5.0f;
+    }
+
+    // Navigate to <SaveGame> -> <Progression> -> <PlayerX>
+    tinyxml2::XMLElement *root = doc.FirstChildElement("SaveGame");
+    if (root)
+    {
+        tinyxml2::XMLElement *progression = root->FirstChildElement("Progression");
+        if (progression)
+        {
+            tinyxml2::XMLElement *playerXElem = progression->FirstChildElement("PlayerX");
+            if (playerXElem)
+            {
+                // Return the float value stored in the XML tag
+                return playerXElem->FloatText(-5.0f);
+            }
+        }
+    }
+
+    // Fallback if the tags are missing or malformed
+    return -5.0f;
+}

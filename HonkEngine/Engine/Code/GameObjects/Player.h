@@ -44,6 +44,15 @@ public:
         canMove = true;
     }
 
+    void LoadPosition()
+    {
+        // Call the system to grab the position from the XML.
+        // If it fails or the file doesn't exist, it safely returns the default -5.0f!
+        float savedX = JournalSaveSystem::GetInstance().GetSavedPlayerX();
+
+        m_position.x = savedX;
+    }
+
     void Update(float dt, long frame) override {
         Input& input = Application::GetInput();
         AnimateGameObject::Update(dt, frame);
