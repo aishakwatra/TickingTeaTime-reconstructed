@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SaveGame>
+    <Progression>
+        <CurrentGameState>0</CurrentGameState>
+        <CurrentRoomState>0</CurrentRoomState>
+        <PlayerX>-5</PlayerX>
+        <PlayerY>0</PlayerY>
+    </Progression>
+    <Journal>
+        <MainPage>
+            <PlayerSpy>5</PlayerSpy>
+            <BombLocation>4</BombLocation>
+            <PlayerEvidence>0</PlayerEvidence>
+        </MainPage>
+        <ClueStates/>
+        <ActiveEvidence/>
+        <BookStatus>
+            <BookClue index="0">false</BookClue>
+            <BookClue index="1">false</BookClue>
+            <LockBook>false</LockBook>
+            <LastScene>false</LastScene>
+        </BookStatus>
+    </Journal>
+</SaveGame>

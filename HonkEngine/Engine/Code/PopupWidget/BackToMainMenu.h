@@ -54,6 +54,8 @@ public:
 
 	void ClickConfirm() {
         JournalSaveSystem::GetInstance().SaveJournalData(); 
+		this->Hide();
+        //PauseMenu::GetInstance().Hide();
 		Application::Get().SetScene("MainMenu");
 		AudioManager::GetInstance().StopSound("hallwayMusic");
 		AudioManager::GetInstance().StopSound("trainAmbience");

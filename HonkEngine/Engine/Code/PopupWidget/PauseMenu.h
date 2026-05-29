@@ -8,6 +8,7 @@
 
 class PauseMenu : public Interface {
 public:
+
     PauseMenu() : Interface("PauseMenu"), shouldReopenPauseMenu(false), optionsMenu(new OptionsMenu()), exitConfirmation(new ExitMenu()), menuConfirmation(new BackToMenu()){
         UIButton* GreyBackground = new UIButton("GreyBackground2", "Assets/Images/Journal/BlackAlpha.png", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(19.2f, 10.8f, 0.0f), true, false, "");
         GreyBackground->SetOnClickAction([this]() { EmptyFunction(); });
@@ -98,6 +99,8 @@ public:
     }
 
     void MainMenu() {
+
+
         GameStateManager::GetInstance().Reset();
         Application::Get().SetScene("MainMenu");
         AudioManager::GetInstance().StopSound("hallwayMusic");
@@ -117,11 +120,16 @@ public:
 
     void ShowMenuConfirmation() {
         menuConfirmation->Show();
+        Hide();
+        AudioManager::GetInstance().PlaySound("buttonClick2");
+        
         if (IsVisible()) {
             shouldReopenPauseMenu = true;
             AudioManager::GetInstance().PlaySound("buttonClick2");
             Hide();
         }
+
+        
     }
 
 
