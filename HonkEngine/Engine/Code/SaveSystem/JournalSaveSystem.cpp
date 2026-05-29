@@ -361,3 +361,121 @@ bool JournalSaveSystem::DeleteSaveFile(const std::string &filepath)
     std::cout << "Fresh default save file '" << filepath << "' successfully created for New Game." << std::endl;
     return true;
 }
+
+bool JournalSaveSystem::LoadJournalClues(const std::string &filepath)
+{
+    tinyxml2::XMLDocument doc;
+
+    // 1. Safe file check fallback
+    if (doc.LoadFile(filepath.c_str()) != tinyxml2::XML_SUCCESS)
+    {
+        std::cout << "No save file found for clues. Keeping defaults." << std::endl;
+        return false;
+    }
+
+    tinyxml2::XMLElement *root = doc.FirstChildElement("SaveGame");
+    if (!root)
+        return false;
+
+    tinyxml2::XMLElement *journalNode = root->FirstChildElement("Journal");
+    if (!journalNode)
+        return false;
+
+    // Navigate to your <ClueStates> parent element
+    tinyxml2::XMLElement *clueStatesNode = journalNode->FirstChildElement("ClueStates");
+    if (clueStatesNode)
+    {
+        JournalData *journal = JournalData::GetInstance();
+
+        // Clear out any old session clues before writing the loaded ones
+        journal->clueStates.clear();
+
+        // 2. REVERSE OPERATION Loop: Look through every child element inside <ClueStates>
+        for (tinyxml2::XMLElement *clueElem = clueStatesNode->FirstChildElement(); clueElem != nullptr;
+            clueElem = clueElem->NextSiblingElement())
+        {
+            // Read attributes/text from the XML element
+            // (Assuming your XML saves elements with attributes like: <Clue cabin="0" index="3" active="true"/>)
+            int cabinVal = clueElem->IntAttribute("cabin", static_cast<int>(CABIN_EMPTY));
+            int clueIndex = clueElem->IntAttribute("index", -1);
+            bool isActive = clueElem->BoolAttribute("active", false);
+
+            if (clueIndex != -1 && cabinVal != static_cast<int>(CABIN_EMPTY))
+            {
+                Cabin loadedCabin = static_cast<Cabin>(cabinVal);
+
+                // Directly set the boolean data back into your inner memory map structure!
+                journal->clueStates[loadedCabin][clueIndex] = isActive;
+            }
+        }
+
+        std::cout << "Clue state data successfully reversed from XML and set into memory!" << std::endl;
+
+        // 3. Force UI updates to draw the checkmarks/unlocked pages visually
+        journal->NotifyObservers();
+        return true;
+    }
+
+    return false;
+}
+
+bool JournalSaveSystem::LoadJournalMainPage(const std::string &filepath)
+{
+    tinyxml2::XMLDocument doc;
+
+    // 1. Try to open the file. If it fails (no file), exit safely!
+    if (doc.LoadFile(filepath.c_str()) != tinyxml2::XML_SUCCESS)
+    {
+        std::cout << "Save file not found. Keeping default journal selections." << std::endl;
+        return false;
+    }
+
+    // Navigate down the hierarchy: <SaveGame> -> <Journal> -> <MainPage>
+    tinyxml2::XMLElement *root = doc.FirstChildElement("SaveGame");
+    if (!root)
+        return false;
+
+    tinyxml2::XMLElement *journalNode = root->FirstChildElement("Journal");
+    if (!journalNode)
+        return false;
+
+    tinyxml2::XMLElement *mainPageNode = journalNode->FirstChildElement("MainPage");
+    if (mainPageNode)
+    {
+        // Access the live JournalData singleton instance
+        JournalData *journal = JournalData::GetInstance();
+
+        // 2. Read the Spy tag (Fallback to CABIN_EMPTY if missing)
+        tinyxml2::XMLElement *spyElem = mainPageNode->FirstChildElement("PlayerSpy");
+        if (spyElem)
+        {
+            int spyVal = spyElem->IntText(static_cast<int>(CABIN_EMPTY));
+            journal->main_page.player_Spy = static_cast<Cabin>(spyVal);
+        }
+
+        // 3. Read the Bomb Location tag (Fallback to LOCATION_EMPTY if missing)
+        tinyxml2::XMLElement *bombElem = mainPageNode->FirstChildElement("BombLocation");
+        if (bombElem)
+        {
+            int bombVal = bombElem->IntText(static_cast<int>(LOCATION_EMPTY));
+            journal->main_page.player_BombLocation = static_cast<Location>(bombVal);
+        }
+
+        // 4. Read the Collected Evidence tag
+        tinyxml2::XMLElement *evidenceElem = mainPageNode->FirstChildElement("PlayerEvidence");
+        if (evidenceElem)
+        {
+            int evidenceVal = evidenceElem->IntText(0);
+            journal->main_page.player_Evidence = evidenceVal;
+            journal->no_of_Evidence = evidenceVal; // Synchronize your secondary variable counter
+        }
+
+        std::cout << "Journal MainPage options successfully loaded by Save System!" << std::endl;
+
+        // 5. Fire observers to visually refresh checkbox UI states on screen
+        journal->NotifyObservers();
+        return true;
+    }
+
+    return false;
+}

@@ -419,6 +419,8 @@ public:
 		//Reset/Hide The Pause Menu
 		pauseMenu.Hide();
         player->LoadPosition();
+        JournalSaveSystem::GetInstance().LoadJournalMainPage();
+        JournalSaveSystem::GetInstance().LoadJournalClues();
 
 
 		entering = false;

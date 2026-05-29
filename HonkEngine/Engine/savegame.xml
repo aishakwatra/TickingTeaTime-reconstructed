@@ -8,8 +8,8 @@
     </Progression>
     <Journal>
         <MainPage>
-            <PlayerSpy>1</PlayerSpy>
-            <BombLocation>3</BombLocation>
+            <PlayerSpy>5</PlayerSpy>
+            <BombLocation>4</BombLocation>
             <PlayerEvidence>0</PlayerEvidence>
         </MainPage>
         <ClueStates/>
