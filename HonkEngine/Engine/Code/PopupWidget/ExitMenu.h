@@ -48,7 +48,8 @@ public:
 		return;
 	}
 
-	void ClickExit() {		
+	void ClickExit() {	
+	JournalSaveSystem::GetInstance().SaveJournalData(); 
 	Application::Get().exitGame();
 		
 	}
