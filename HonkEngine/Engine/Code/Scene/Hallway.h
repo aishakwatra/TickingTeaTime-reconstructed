@@ -413,7 +413,12 @@ public:
 			}	
 		}
 
+		//Reset/Hide The Pause Menu
+		pauseMenu.Hide();
+
+
 		entering = false;
+
 
 		// Test clue activation
 

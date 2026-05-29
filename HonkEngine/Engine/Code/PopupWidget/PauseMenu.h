@@ -120,8 +120,8 @@ public:
 
     void ShowMenuConfirmation() {
         menuConfirmation->Show();
-        Hide();
-        AudioManager::GetInstance().PlaySound("buttonClick2");
+        //Hide();
+        //AudioManager::GetInstance().PlaySound("buttonClick2");
         
         if (IsVisible()) {
             shouldReopenPauseMenu = true;
