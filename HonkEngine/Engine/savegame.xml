@@ -3,13 +3,13 @@
     <Progression>
         <CurrentGameState>0</CurrentGameState>
         <CurrentRoomState>0</CurrentRoomState>
-        <PlayerX>-12.74</PlayerX>
+        <PlayerX>-5</PlayerX>
         <PlayerY>0</PlayerY>
     </Progression>
     <Journal>
         <MainPage>
-            <PlayerSpy>5</PlayerSpy>
-            <BombLocation>4</BombLocation>
+            <PlayerSpy>1</PlayerSpy>
+            <BombLocation>3</BombLocation>
             <PlayerEvidence>0</PlayerEvidence>
         </MainPage>
         <ClueStates/>

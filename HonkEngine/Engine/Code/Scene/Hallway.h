@@ -418,6 +418,7 @@ public:
 
 		//Reset/Hide The Pause Menu
 		pauseMenu.Hide();
+        player->LoadPosition();
 
 
 		entering = false;

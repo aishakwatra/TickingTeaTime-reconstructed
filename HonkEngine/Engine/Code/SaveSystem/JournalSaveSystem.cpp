@@ -309,3 +309,55 @@ float JournalSaveSystem::GetSavedPlayerX(const std::string &filepath)
     // Fallback if the tags are missing or malformed
     return -5.0f;
 }
+
+bool JournalSaveSystem::DeleteSaveFile(const std::string &filepath)
+{
+    // 1. Delete the old file
+    // std::remove returns 0 if the file was successfully deleted
+    if (std::remove(filepath.c_str()) == 0)
+    {
+        std::cout << "Save file '" << filepath << "' successfully deleted." << std::endl;
+    }
+    else
+    {
+        std::cout << "No existing save file found to delete. Creating a fresh one anyway." << std::endl;
+    }
+
+    // 2. Create and write a completely fresh, default template to the new file
+    std::ofstream newFile(filepath);
+    if (!newFile.is_open())
+    {
+        std::cerr << "Error: Could not create a new blank save file!" << std::endl;
+        return false;
+    }
+
+    // This writes the exact baseline starting template for a new game session
+    newFile << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            << "<SaveGame>\n"
+            << "    <Progression>\n"
+            << "        <CurrentGameState>0</CurrentGameState>\n"
+            << "        <CurrentRoomState>0</CurrentRoomState>\n"
+            << "        <PlayerX>-5</PlayerX>\n" // Starting X default from Player.h
+            << "        <PlayerY>0</PlayerY>\n"
+            << "    </Progression>\n"
+            << "    <Journal>\n"
+            << "        <MainPage>\n"
+            << "            <PlayerSpy>5</PlayerSpy>\n"
+            << "            <BombLocation>4</BombLocation>\n"
+            << "            <PlayerEvidence>0</PlayerEvidence>\n"
+            << "        </MainPage>\n"
+            << "        <ClueStates/>\n"
+            << "        <ActiveEvidence/>\n"
+            << "        <BookStatus>\n"
+            << "            <BookClue index=\"0\">false</BookClue>\n"
+            << "            <BookClue index=\"1\">false</BookClue>\n"
+            << "            <LockBook>false</LockBook>\n"
+            << "            <LastScene>false</LastScene>\n"
+            << "        </BookStatus>\n"
+            << "    </Journal>\n"
+            << "</SaveGame>\n";
+
+    newFile.close();
+    std::cout << "Fresh default save file '" << filepath << "' successfully created for New Game." << std::endl;
+    return true;
+}

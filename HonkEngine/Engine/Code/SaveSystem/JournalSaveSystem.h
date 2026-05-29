@@ -18,6 +18,7 @@ public:
     bool LoadJournalData(const std::string &filepath = "savegame.xml");
 
     float GetSavedPlayerX(const std::string &filepath = "savegame.xml");
+    bool DeleteSaveFile(const std::string &filepath = "savegame.xml");
 
 private:
     // Private constructor/destructor for Singleton design pattern
