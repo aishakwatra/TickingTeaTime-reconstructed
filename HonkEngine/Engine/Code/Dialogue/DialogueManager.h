@@ -97,7 +97,8 @@ public:
 
         tinyxml2::XMLElement *root = doc.FirstChildElement("Dialogues");
         vector<Dialogue> loadedDialogues;
-        for (tinyxml2::XMLElement *element = root->FirstChildElement("Dialogue"); 
+        for (
+            tinyxml2::XMLElement *element = root->FirstChildElement("Dialogue");
             element != nullptr;
             element = element->NextSiblingElement("Dialogue"))
         {
@@ -107,7 +108,8 @@ public:
             if (speakerElement)
             {
                 dialogue.speakerName = speakerElement->Attribute("name");
-                for (tinyxml2::XMLElement *lineElement = speakerElement->FirstChildElement(); 
+                for (
+                    tinyxml2::XMLElement *lineElement = speakerElement->FirstChildElement(); 
                     lineElement != nullptr;
                     lineElement = lineElement->NextSiblingElement())
                 {
@@ -118,7 +120,8 @@ public:
             tinyxml2::XMLElement *choicesElement = element->FirstChildElement("Choices");
             if (choicesElement)
             {
-                for (tinyxml2::XMLElement *choiceElement = choicesElement->FirstChildElement();
+                for (
+                    tinyxml2::XMLElement *choiceElement = choicesElement->FirstChildElement();
                     choiceElement != nullptr; 
                     choiceElement = choiceElement->NextSiblingElement())
                 {
