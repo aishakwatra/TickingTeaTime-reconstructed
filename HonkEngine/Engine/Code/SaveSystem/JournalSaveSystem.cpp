@@ -401,7 +401,8 @@ bool JournalSaveSystem::LoadJournalClues(const std::string &filepath)
         // Clear out any old session clues before writing the loaded ones
         journal->clueStates.clear();
 
-        for (tinyxml2::XMLElement *cabinElem = clueStatesNode->FirstChildElement("Cabin"); cabinElem != nullptr;
+        for (tinyxml2::XMLElement *cabinElem = clueStatesNode->FirstChildElement("Cabin"); 
+            cabinElem != nullptr;
             cabinElem = cabinElem->NextSiblingElement("Cabin"))
         {
             int cabinVal = cabinElem->IntAttribute("id", static_cast<int>(CABIN_EMPTY));
@@ -412,7 +413,8 @@ bool JournalSaveSystem::LoadJournalClues(const std::string &filepath)
 
             Cabin loadedCabin = static_cast<Cabin>(cabinVal);
 
-            for (tinyxml2::XMLElement *clueElem = cabinElem->FirstChildElement("Clue"); clueElem != nullptr;
+            for (tinyxml2::XMLElement *clueElem = cabinElem->FirstChildElement("Clue"); 
+                clueElem != nullptr;
                 clueElem = clueElem->NextSiblingElement("Clue"))
             {
                 int clueIndex = clueElem->IntAttribute("index", -1);
