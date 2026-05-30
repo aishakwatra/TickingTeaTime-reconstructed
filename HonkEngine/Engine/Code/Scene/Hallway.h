@@ -618,48 +618,71 @@ public:
 
             DoorManager &doorManager = DoorManager::GetInstance();
             bool isNearDoor = doorManager.CheckDoorCollisions(playerPos, player->GetScale(),
-				[this, &bellManager](Door* door) {  // Capture bellManager by reference
-					Input& input = Application::GetInput();
-					if (door) {
-						if (door->getPermission()) {
-							instructionText->SetContent("Press [E] to enter");
+                [this, &bellManager](Door *door)
+                {
+                    Input &input = Application::GetInput();
 
-							if (input.Get().GetKeyDown(GLFW_KEY_E) && !entering)
-							{
-								if (door->GetName() == "KitchenDoor")
-								{
-									player->StopMovement();
-									transitionEffects->FadeOut(1.0f, [this]() {Application::Get().SetScene("Kitchen"); player->ResumeMovement(); });
-									entering = true;
-								}
-								else
-								{
-									player->StopMovement();
-									bellManager.StopAllRinging();
+                    if (door)
+                    {
+                        if (door->getPermission())
+                        {
+                            instructionText->SetContent("Press [E] to enter");
 
-									audioManager.PlaySound("knockDoor");
-									Application::Get().SetTimer(1000, [this]() { transitionEffects->FadeOut(1.0f, [this]() {}); }, false);
+                            if (input.Get().GetKeyDown(GLFW_KEY_E) && !entering)
+                            {
+                                if (door->GetName() == "KitchenDoor")
+                                {
+                                    player->StopMovement();
+                                    transitionEffects->FadeOut(1.0f,
+                                        [this]()
+                                        {
+                                            Application::Get().SetScene("Kitchen");
+                                            player->ResumeMovement();
+                                        });
+                                    entering = true;
+                                }
+                                else
+                                {
+                                    player->StopMovement();
+                                    bellManager.StopAllRinging();
 
-									audioManager.PauseSound("hallwayMusic");
-									Application::Get().SetTimer(3000, [this, door]() {Application::Get().SetScene(door->GetSceneName()); player->ResumeMovement(); }, false);
-									entering = true;
-								}
-							}
-						}
-						else {
-							GameState currentGameState = gameStateManager.getGameState();
-							RoomState currentRoomState = gameStateManager.getRoomState();
+                                    audioManager.PlaySound("knockDoor");
 
-							// Check if the room state is Prepare and if the current door matches the game state room
-							if (currentRoomState == RoomState::Prepare && door->GetName() == gameStateNameToDoorName(currentGameState)) {
-								instructionText->SetContent("Meal is required before serving.");
-							}
-							else {
-								instructionText->SetContent("Locked. Permission required.");
-							}
-						}
-					}
-				});
+                                    Application::Get().SetTimer(
+                                        1000, [this]() { transitionEffects->FadeOut(1.0f, [this]() {}); }, false);
+
+                                    audioManager.PauseSound("hallwayMusic");
+
+                                    Application::Get().SetTimer(
+                                        3000,
+                                        [this, door]()
+                                        {
+                                            Application::Get().SetScene(door->GetSceneName());
+                                            player->ResumeMovement();
+                                        },
+                                        false);
+
+                                    entering = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            GameState currentGameState = gameStateManager.getGameState();
+                            RoomState currentRoomState = gameStateManager.getRoomState();
+
+                            if (currentRoomState == RoomState::Prepare &&
+                                door->GetName() == gameStateNameToDoorName(currentGameState))
+                            {
+                                instructionText->SetContent("Meal is required before serving.");
+                            }
+                            else
+                            {
+                                instructionText->SetContent("Locked. Permission required.");
+                            }
+                        }
+                    }
+                });
 
             instructionText->setActiveStatus(isNearDoor);
         }
