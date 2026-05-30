@@ -6,11 +6,17 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.userprefs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
 # Build results
+HonkEngine/x64/
+HonkEngine/[Dd]ebug/
+HonkEngine/[Rr]elease/
+HonkEngine/[Bb]in/
+HonkEngine/[Oo]bj/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -26,7 +32,7 @@ bld/
 [Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory
-.vs/
+HonkEngine/.vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -44,6 +50,18 @@ nunit-*.xml
 [Rr]eleasePS/
 dlldata.c
 
+# Build results - Engine project
+HonkEngine/Engine/x64/
+HonkEngine/Engine/Debug/
+HonkEngine/Engine/Release/
+HonkEngine/Engine/bin/
+HonkEngine/Engine/obj/
+
+# Build results - Test project  
+HonkEngine/HonkEngineTests/x64/
+HonkEngine/HonkEngineTests/Debug/
+HonkEngine/HonkEngineTests/Release/
+
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
@@ -54,6 +72,20 @@ artifacts/
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
+
+# Build artifacts
+*.ilk
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.ipch
+*.exe
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Files built by Visual Studio
 *_i.c
@@ -81,7 +113,6 @@ ScaffoldingReadMe.txt
 *.user
 *.csproj
 *.vbproj
-*.sln
 *.suo
 *.cache
 *.csproj.user
