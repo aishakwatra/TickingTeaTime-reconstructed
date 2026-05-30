@@ -22,5 +22,5 @@ jobs:
           echo "Checking formatting..."
           find HonkEngine/Engine/Code -name "*.h" -o -name "*.cpp" | \
           xargs clang-format --dry-run --Werror \
-            --style=file:.clang-format
+            --style=file:HonkEngine/Engine/.clang-format
           echo "All files pass formatting check!"
