@@ -9,7 +9,8 @@
 #include "Scene/KitchenData.h"
 
 // Helper to reset KitchenData between tests
-static void ResetKitchen() {
+static void ResetKitchen()
+{
     KitchenData::GetInstance()->clearPlate();
 }
 
@@ -17,9 +18,10 @@ static void ResetKitchen() {
 // NORMAL CASES
 // =============================================================
 
-TEST_CASE("KitchenData - setSandwich stores correct value", "[KitchenData][normal]") {
+TEST_CASE("KitchenData - setSandwich stores correct value", "[KitchenData][normal]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setSandwich(SALMON);
     REQUIRE(kitchen->getSandwich() == SALMON);
@@ -34,9 +36,10 @@ TEST_CASE("KitchenData - setSandwich stores correct value", "[KitchenData][norma
     REQUIRE(kitchen->getSandwich() == CUCUMBER);
 }
 
-TEST_CASE("KitchenData - setTea stores correct value", "[KitchenData][normal]") {
+TEST_CASE("KitchenData - setTea stores correct value", "[KitchenData][normal]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setTea(EARLGREYTEA);
     REQUIRE(kitchen->getTea() == EARLGREYTEA);
@@ -51,9 +54,10 @@ TEST_CASE("KitchenData - setTea stores correct value", "[KitchenData][normal]") 
     REQUIRE(kitchen->getTea() == GREENTEA);
 }
 
-TEST_CASE("KitchenData - setDessert stores correct value", "[KitchenData][normal]") {
+TEST_CASE("KitchenData - setDessert stores correct value", "[KitchenData][normal]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setDessert(ECLAIR);
     REQUIRE(kitchen->getDessert() == ECLAIR);
@@ -68,18 +72,19 @@ TEST_CASE("KitchenData - setDessert stores correct value", "[KitchenData][normal
     REQUIRE(kitchen->getDessert() == SCONE);
 }
 
-TEST_CASE("KitchenData - setOptional stores milk correctly", "[KitchenData][normal]") {
+TEST_CASE("KitchenData - setOptional stores milk correctly", "[KitchenData][normal]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setOptional(MILK);
     REQUIRE(kitchen->getOptional() == MILK);
 }
 
-TEST_CASE("KitchenData - checkCompletePlate returns true when all three set",
-    "[KitchenData][normal]") {
+TEST_CASE("KitchenData - checkCompletePlate returns true when all three set", "[KitchenData][normal]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setSandwich(SALMON);
     kitchen->setTea(EARLGREYTEA);
@@ -88,9 +93,9 @@ TEST_CASE("KitchenData - checkCompletePlate returns true when all three set",
     REQUIRE(kitchen->checkCompletePlate() == true);
 }
 
-TEST_CASE("KitchenData - clearPlate resets all choices to empty",
-    "[KitchenData][normal]") {
-    KitchenData* kitchen = KitchenData::GetInstance();
+TEST_CASE("KitchenData - clearPlate resets all choices to empty", "[KitchenData][normal]")
+{
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setSandwich(SALMON);
     kitchen->setTea(EARLGREYTEA);
@@ -109,10 +114,10 @@ TEST_CASE("KitchenData - clearPlate resets all choices to empty",
 // EDGE CASES
 // =============================================================
 
-TEST_CASE("KitchenData - setting same item twice keeps latest value",
-    "[KitchenData][edge]") {
+TEST_CASE("KitchenData - setting same item twice keeps latest value", "[KitchenData][edge]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setSandwich(SALMON);
     kitchen->setSandwich(BEEF);
@@ -127,10 +132,10 @@ TEST_CASE("KitchenData - setting same item twice keeps latest value",
     REQUIRE(kitchen->getDessert() == SCONE);
 }
 
-TEST_CASE("KitchenData - checkCompletePlate ignores optional milk",
-    "[KitchenData][edge]") {
+TEST_CASE("KitchenData - checkCompletePlate ignores optional milk", "[KitchenData][edge]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     // Plate is complete without optional
     kitchen->setSandwich(EGG);
@@ -143,9 +148,9 @@ TEST_CASE("KitchenData - checkCompletePlate ignores optional milk",
     REQUIRE(kitchen->checkCompletePlate() == true);
 }
 
-TEST_CASE("KitchenData - clearPlate then checkCompletePlate returns false",
-    "[KitchenData][edge]") {
-    KitchenData* kitchen = KitchenData::GetInstance();
+TEST_CASE("KitchenData - clearPlate then checkCompletePlate returns false", "[KitchenData][edge]")
+{
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setSandwich(SALMON);
     kitchen->setTea(EARLGREYTEA);
@@ -159,45 +164,45 @@ TEST_CASE("KitchenData - clearPlate then checkCompletePlate returns false",
 // FAILURE CASES
 // =============================================================
 
-TEST_CASE("KitchenData - checkCompletePlate false when only sandwich set",
-    "[KitchenData][failure]") {
+TEST_CASE("KitchenData - checkCompletePlate false when only sandwich set", "[KitchenData][failure]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setSandwich(SALMON);
     REQUIRE(kitchen->checkCompletePlate() == false);
 }
 
-TEST_CASE("KitchenData - checkCompletePlate false when only tea set",
-    "[KitchenData][failure]") {
+TEST_CASE("KitchenData - checkCompletePlate false when only tea set", "[KitchenData][failure]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setTea(EARLGREYTEA);
     REQUIRE(kitchen->checkCompletePlate() == false);
 }
 
-TEST_CASE("KitchenData - checkCompletePlate false when only dessert set",
-    "[KitchenData][failure]") {
+TEST_CASE("KitchenData - checkCompletePlate false when only dessert set", "[KitchenData][failure]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setDessert(ECLAIR);
     REQUIRE(kitchen->checkCompletePlate() == false);
 }
 
-TEST_CASE("KitchenData - checkCompletePlate false when sandwich and tea but no dessert",
-    "[KitchenData][failure]") {
+TEST_CASE("KitchenData - checkCompletePlate false when sandwich and tea but no dessert", "[KitchenData][failure]")
+{
     ResetKitchen();
-    KitchenData* kitchen = KitchenData::GetInstance();
+    KitchenData *kitchen = KitchenData::GetInstance();
 
     kitchen->setSandwich(SALMON);
     kitchen->setTea(EARLGREYTEA);
     REQUIRE(kitchen->checkCompletePlate() == false);
 }
 
-TEST_CASE("KitchenData - checkCompletePlate false on fresh instance",
-    "[KitchenData][failure]") {
+TEST_CASE("KitchenData - checkCompletePlate false on fresh instance", "[KitchenData][failure]")
+{
     ResetKitchen();
     REQUIRE(KitchenData::GetInstance()->checkCompletePlate() == false);
 }
