@@ -28,7 +28,6 @@ public:
     {
         isVisible = false;
         setActiveStatus(false);
-
     }
 
     // Check if the interface is currently visible
