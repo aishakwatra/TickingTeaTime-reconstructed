@@ -1,6 +1,6 @@
-#define WIN_WIDTH  1920
+#define WIN_WIDTH 1920
 #define WIN_HEIGHT 1080
-#define NAME    "Ticking Tea Time"
+#define NAME "Ticking Tea Time"
 
 #include <windows.h>
 #include <tchar.h>
@@ -27,17 +27,19 @@
 #include "Scene/BeforeEndCutscene.h"
 #include <iostream>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+void processInput(GLFWwindow *window);
 
-   int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-   //int main()
-   {
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+// int main()
+{
 
     HANDLE hMutex = CreateMutex(NULL, TRUE, L"Global\\TickingTeaTime");
 
-    if (hMutex == NULL || GetLastError() == ERROR_ALREADY_EXISTS) {
-        MessageBox(NULL, _T("Another instance of the application is already running."), _T("Error"), MB_OK | MB_ICONERROR);
+    if (hMutex == NULL || GetLastError() == ERROR_ALREADY_EXISTS)
+    {
+        MessageBox(
+            NULL, _T("Another instance of the application is already running."), _T("Error"), MB_OK | MB_ICONERROR);
         return 1;
     }
 
@@ -64,7 +66,8 @@ void processInput(GLFWwindow* window);
     // Run game
     game.Run();
 
-    if (hMutex) {
+    if (hMutex)
+    {
         ReleaseMutex(hMutex);
         CloseHandle(hMutex);
     }

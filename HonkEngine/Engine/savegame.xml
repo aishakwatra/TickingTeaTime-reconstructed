@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SaveGame>
+    <Progression>
+        <CurrentGameState>2</CurrentGameState>
+        <CurrentRoomState>1</CurrentRoomState>
+        <PlayerX>4.0924273</PlayerX>
+        <PlayerY>0</PlayerY>
+    </Progression>
+    <Journal>
+        <MainPage>
+            <PlayerSpy>5</PlayerSpy>
+            <BombLocation>4</BombLocation>
+            <PlayerEvidence>0</PlayerEvidence>
+        </MainPage>
+        <ClueStates>
+            <Cabin id="0">
+                <Clue index="0">true</Clue>
+                <Clue index="1">true</Clue>
+                <Clue index="2">true</Clue>
+                <Clue index="3">true</Clue>
+                <Clue index="4">true</Clue>
+                <Clue index="5">true</Clue>
+                <Clue index="6">true</Clue>
+            </Cabin>
+        </ClueStates>
+        <ActiveEvidence>
+            <Cabin id="0">
+                <Evidence>Exchange letters with someone on Westside</Evidence>
+                <Evidence>Significant other is a Westsider</Evidence>
+            </Cabin>
+        </ActiveEvidence>
+        <BookStatus>
+            <BookClue index="0">false</BookClue>
+            <BookClue index="1">false</BookClue>
+            <LockBook>false</LockBook>
+            <LastScene>false</LastScene>
+        </BookStatus>
+    </Journal>
+</SaveGame>
