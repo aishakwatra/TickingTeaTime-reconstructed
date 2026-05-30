@@ -90,6 +90,7 @@
     <ClInclude Include="Code\GameObjects\BellSoundClue.h" />
     <ClInclude Include="Code\UI\UIAnimated.h" />
     <ClInclude Include="Code\GameObjects\BellSoundClueManager.h" />
+    <ClInclude Include="Code\Scene\RoomScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\Library\freetype.lib" />
