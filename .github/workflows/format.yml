@@ -1,0 +1,26 @@
+name: Clang-Format Style Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  clang-format-check:
+    name: Check C++ Formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install clang-format
+        run: sudo apt-get install -y clang-format
+
+      - name: Run clang-format check
+        run: |
+          echo "Checking formatting..."
+          find HonkEngine/Engine/Code -name "*.h" -o -name "*.cpp" | \
+          xargs clang-format --dry-run --Werror \
+            --style=file:.clang-format
+          echo "All files pass formatting check!"
