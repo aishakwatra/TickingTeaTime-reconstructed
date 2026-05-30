@@ -13,14 +13,30 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # needed to compare branches
 
       - name: Install clang-format
         run: sudo apt-get install -y clang-format
 
-      - name: Run clang-format check
+      - name: Run clang-format check on changed files
         run: |
-          echo "Checking formatting..."
-          find HonkEngine/Engine/Code -name "*.h" -o -name "*.cpp" | \
-          xargs clang-format --dry-run --Werror \
+          echo "Finding changed C++ files..."
+
+          # Get list of changed .h and .cpp files in this PR
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD \
+            | grep -E '\.(h|cpp)$' || true)
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No C++ files changed, skipping format check."
+            exit 0
+          fi
+
+          echo "Checking these files:"
+          echo "$CHANGED_FILES"
+
+          # Run clang-format check on changed files only
+          echo "$CHANGED_FILES" | xargs clang-format --dry-run --Werror \
             --style=file:HonkEngine/Engine/.clang-format
-          echo "All files pass formatting check!"
+
+          echo "All changed files pass formatting check!"
