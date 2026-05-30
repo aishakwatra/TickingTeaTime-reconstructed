@@ -1,0 +1,43 @@
+name: Clang-Format Style Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  clang-format-check:
+    name: Check C++ Formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install clang-format
+        run: sudo apt-get install -y clang-format
+
+      - name: Run clang-format check on changed files
+        run: |
+          echo "Finding changed C++ files..."
+
+          # Get changed .h and .cpp files, excluding catch2 folder
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD \
+            | grep -E '\.(h|cpp)$' \
+            | grep -v 'catch2/' \
+            || true)
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No C++ files changed, skipping format check."
+            exit 0
+          fi
+
+          echo "Checking these files:"
+          echo "$CHANGED_FILES"
+
+          echo "$CHANGED_FILES" | xargs clang-format --dry-run --Werror \
+            --style=file:HonkEngine/.clang-format
+
+          echo "All changed files pass formatting check!"

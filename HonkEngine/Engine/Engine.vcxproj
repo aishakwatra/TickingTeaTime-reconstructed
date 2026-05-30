@@ -214,6 +214,7 @@ xcopy /e /i /y "$(ProjectDir)..\Engine\Assets" "$(OutDir)Assets\"
     <ClInclude Include="Code\Scene\Room2.h" />
     <ClInclude Include="Code\Scene\Room3.h" />
     <ClInclude Include="Code\Scene\Room4.h" />
+    <ClInclude Include="Code\Scene\RoomScene.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
     <ClInclude Include="Code\Renderer\Shader.h" />
     <ClInclude Include="Code\Scene\TutorialScene.h" />
