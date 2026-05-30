@@ -176,7 +176,8 @@ bool JournalSaveSystem::LoadJournalData(const std::string &filepath)
         if (gameStateElem && roomStateElem)
         {
             GameState savedGameState = static_cast<GameState>(gameStateElem->IntText(static_cast<int>(INITIAL_ROOM)));
-            RoomState savedRoomState = static_cast<RoomState>(roomStateElem->IntText(static_cast<int>(RoomState::Order)));
+            RoomState savedRoomState =
+                static_cast<RoomState>(roomStateElem->IntText(static_cast<int>(RoomState::Order)));
             GameStateManager::GetInstance().RestoreFromSave(savedGameState, savedRoomState);
         }
 

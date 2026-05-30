@@ -3,7 +3,7 @@
 #include "Scene.h"
 
 #include "../GameObjects/RenderGameObject.h"
-#include"../GameObjects/AnimateGameObject.h"	
+#include "../GameObjects/AnimateGameObject.h"
 #include "../Text/Text.h"
 
 #include "../UI/UIButton.h"
@@ -16,13 +16,14 @@
 #include "../GameStateManager.h"
 
 
-class MainMenu : public Scene {
+class MainMenu : public Scene
+{
 
 public:
+    MainMenu() : audioManager(AudioManager::GetInstance())
+    {
 
-	MainMenu() :audioManager(AudioManager::GetInstance()) {
-
-		audioManager.LoadSound("menuMusic", "Assets/Sounds/Music/BGmusic_Cabin2.mp3", Music, 0.6f);
+        audioManager.LoadSound("menuMusic", "Assets/Sounds/Music/BGmusic_Cabin2.mp3", Music, 0.6f);
         audioManager.LoadSound("buttonClick2", "Assets/Sounds/SFX_ButtonClick.mp3", SFX, 9.0f);
 
         GameObject *MainMenuBackground =
@@ -90,112 +91,114 @@ public:
 
         setMainMenuState();
 
-		/*JournalData::GetInstance()->ActivateClue(CABIN21, 0);
-		JournalData::GetInstance()->ActivateClue(CABIN21, 1);
-		JournalData::GetInstance()->ActivateClue(CABIN21, 2);
-		JournalData::GetInstance()->ActivateClue(CABIN21, 3);
-		JournalData::GetInstance()->ActivateClue(CABIN21, 4);
-		JournalData::GetInstance()->ActivateClue(CABIN21, 5);
-		JournalData::GetInstance()->ActivateClue(CABIN21, 6);
+        /*JournalData::GetInstance()->ActivateClue(CABIN21, 0);
+        JournalData::GetInstance()->ActivateClue(CABIN21, 1);
+        JournalData::GetInstance()->ActivateClue(CABIN21, 2);
+        JournalData::GetInstance()->ActivateClue(CABIN21, 3);
+        JournalData::GetInstance()->ActivateClue(CABIN21, 4);
+        JournalData::GetInstance()->ActivateClue(CABIN21, 5);
+        JournalData::GetInstance()->ActivateClue(CABIN21, 6);
 
-		JournalData::GetInstance()->ActivateClue(CABIN1, 0);
-		JournalData::GetInstance()->ActivateClue(CABIN1, 1);
-		JournalData::GetInstance()->ActivateClue(CABIN1, 2);
-		JournalData::GetInstance()->ActivateClue(CABIN1, 3);
-		JournalData::GetInstance()->ActivateClue(CABIN1, 4);
-		JournalData::GetInstance()->ActivateClue(CABIN1, 5);
-		JournalData::GetInstance()->ActivateClue(CABIN1, 6);
+        JournalData::GetInstance()->ActivateClue(CABIN1, 0);
+        JournalData::GetInstance()->ActivateClue(CABIN1, 1);
+        JournalData::GetInstance()->ActivateClue(CABIN1, 2);
+        JournalData::GetInstance()->ActivateClue(CABIN1, 3);
+        JournalData::GetInstance()->ActivateClue(CABIN1, 4);
+        JournalData::GetInstance()->ActivateClue(CABIN1, 5);
+        JournalData::GetInstance()->ActivateClue(CABIN1, 6);
 
-		JournalData::GetInstance()->ActivateClue(CABIN4, 0);
-		JournalData::GetInstance()->ActivateClue(CABIN4, 1);
-		JournalData::GetInstance()->ActivateClue(CABIN4, 2);
-		JournalData::GetInstance()->ActivateClue(CABIN4, 3);
-		JournalData::GetInstance()->ActivateClue(CABIN4, 4);
-		JournalData::GetInstance()->ActivateClue(CABIN4, 5);
-		JournalData::GetInstance()->ActivateClue(CABIN4, 6);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 0);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 1);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 2);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 3);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 4);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 5);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 6);
 
 
-		JournalData::GetInstance()->ActivateClue(CABIN3, 8);
-		JournalData::GetInstance()->ActivateClue(CABIN4, 7);*/
+        JournalData::GetInstance()->ActivateClue(CABIN3, 8);
+        JournalData::GetInstance()->ActivateClue(CABIN4, 7);*/
+    }
 
-	}
+    void Update(float dt, long frame)
+    {
+        Scene::Update(dt, frame);
 
-	void Update(float dt, long frame)
-	{
-		Scene::Update(dt, frame);
+        transitionEffects->Update(dt);
 
-		transitionEffects->Update(dt);
+        Input &input = Application::GetInput();
 
-		Input& input = Application::GetInput();
+        if (startOfGame)
+        {
 
-		if (startOfGame) {
-			
-			if (input.Get().GetKeyDown(GLFW_KEY_SPACE) || input.Get().GetMouseButtonDown(0))
-			{
-				startOfGame = false;
-				setMainMenuState();
-				AudioManager::GetInstance().PlaySound("buttonClick2");
-			}
-		}		
+            if (input.Get().GetKeyDown(GLFW_KEY_SPACE) || input.Get().GetMouseButtonDown(0))
+            {
+                startOfGame = false;
+                setMainMenuState();
+                AudioManager::GetInstance().PlaySound("buttonClick2");
+            }
+        }
+    }
 
-	}
+    void setMainMenuState()
+    {
 
-	void setMainMenuState() {
+        if (startOfGame)
+        {
 
-		if (startOfGame) {
-
-			ContinueButton->setActiveStatus(false);
-			PlayButton->setActiveStatus(false);
-			QuitButton->setActiveStatus(false);
-			OptionsButton->setActiveStatus(false); 
-			clickToBegin->setActiveStatus(true);
-
-		}
-		else {
+            ContinueButton->setActiveStatus(false);
+            PlayButton->setActiveStatus(false);
+            QuitButton->setActiveStatus(false);
+            OptionsButton->setActiveStatus(false);
+            clickToBegin->setActiveStatus(true);
+        }
+        else
+        {
             ContinueButton->setActiveStatus(true);
-			PlayButton->setActiveStatus(true);
-			QuitButton->setActiveStatus(true);
-			OptionsButton->setActiveStatus(true);
-			clickToBegin->setActiveStatus(false);
-		}
+            PlayButton->setActiveStatus(true);
+            QuitButton->setActiveStatus(true);
+            OptionsButton->setActiveStatus(true);
+            clickToBegin->setActiveStatus(false);
+        }
+    }
 
-	}
+    void OnEnter() override
+    {
+        if (!audioManager.IsSoundPlaying("menuMusic"))
+            audioManager.PlaySound("menuMusic", true);
+        transitioning = true;
+        transitionEffects->FadeIn(3.0f, [this]() { transitioning = false; });
+    }
 
-	void OnEnter() override {
-		if (!audioManager.IsSoundPlaying("menuMusic"))
-			audioManager.PlaySound("menuMusic", true);
-		transitioning = true;
-		transitionEffects->FadeIn(3.0f, [this]() {
-			transitioning = false;
-			});
-	}
-
-    void OnExit() override {
-		audioManager.StopSound("menuMusic");
-
-	}
+    void OnExit() override
+    {
+        audioManager.StopSound("menuMusic");
+    }
 
 private:
+    AudioManager &audioManager;
 
-	AudioManager& audioManager;
+    // BUTTON FUNCTIONS
 
-	//BUTTON FUNCTIONS
-
-	void clickPlay() {
-		if (!transitioning) {
-			transitioning = true;
-			//transitioning = true;
-			GameStateManager::GetInstance().Reset();
+    void clickPlay()
+    {
+        if (!transitioning)
+        {
+            transitioning = true;
+            // transitioning = true;
+            GameStateManager::GetInstance().Reset();
             JournalSaveSystem::GetInstance().DeleteSaveFile("savegame.xml");
-			AudioManager::GetInstance().PlaySound("buttonClick2");
-			transitionEffects->FadeOut(2.0f, [this]() {
-				Application::Get().SetScene("OpenScene");
-				//Application::Get().SetScene("JournalEntry");
-				});
-		}
-	}
+            AudioManager::GetInstance().PlaySound("buttonClick2");
+            transitionEffects->FadeOut(2.0f,
+                [this]()
+                {
+                    Application::Get().SetScene("OpenScene");
+                    // Application::Get().SetScene("JournalEntry");
+                });
+        }
+    }
 
-	void clickContinue()
+    void clickContinue()
     {
         if (!transitioning)
         {
@@ -212,42 +215,41 @@ private:
         }
     }
 
-	void clickOptions() { 
-		AudioManager::GetInstance().PlaySound("buttonClick2");
-;		optionsMenu.Show();
-		//ACTIVATE OPTIONS MENU
-	}
+    void clickOptions()
+    {
+        AudioManager::GetInstance().PlaySound("buttonClick2");
+        ;
+        optionsMenu.Show();
+        // ACTIVATE OPTIONS MENU
+    }
 
-	void clickExit() { 
-		AudioManager::GetInstance().PlaySound("buttonClick2");
+    void clickExit()
+    {
+        AudioManager::GetInstance().PlaySound("buttonClick2");
 
-		exitMenu.Show();
+        exitMenu.Show();
 
-		/*transitionEffects->FadeOut(3.0f, [this]() {
-			Application::Get().exitGame();
-		});*/
+        /*transitionEffects->FadeOut(3.0f, [this]() {
+            Application::Get().exitGame();
+        });*/
 
-		//ACTIVATE EXIT MENU
-	
-	}
+        // ACTIVATE EXIT MENU
+    }
 
 
-	bool startOfGame = true;
-	bool transitioning = false;
+    bool startOfGame = true;
+    bool transitioning = false;
 
-	UIButton* PlayButton;
+    UIButton *PlayButton;
     UIButton *ContinueButton;
-	UIButton* OptionsButton; 
-	UIButton* QuitButton;
+    UIButton *OptionsButton;
+    UIButton *QuitButton;
 
-	Text* clickToBegin;
+    Text *clickToBegin;
 
-	UIElement* transitionObject;
-	std::unique_ptr<TransitionEffects> transitionEffects;
+    UIElement *transitionObject;
+    std::unique_ptr<TransitionEffects> transitionEffects;
 
-	OptionsMenu optionsMenu;
-	ExitMenu exitMenu;
-
+    OptionsMenu optionsMenu;
+    ExitMenu exitMenu;
 };
-
-
