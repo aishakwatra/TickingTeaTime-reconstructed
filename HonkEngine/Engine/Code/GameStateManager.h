@@ -4,11 +4,11 @@
 #include <map>
 #include "Application.h"
 #include "GameObjects/BellManager.h"
+#include "GameObjects/OrderData.h"
 #include "Dialogue/DialogueManager.h"
 #include "Audio/AudioManager.h"
 #include "GameObjects/DoorManager.h"
 #include "GameObjects/Timer.h"
-#include "GameObjects/OrderData.h"
 #include "Scene/KitchenData.h"
 
 #define PREPARE_DURATION 210   // in seconds
@@ -34,7 +34,7 @@ enum RoomState {
     End,
 };
 
-std::string gameStateNameToDoorName(GameState state) {
+inline std::string gameStateNameToDoorName(GameState state) {
     switch (state) {
     case GameState::ROOM1_STATE:
         return "Room1Door";
@@ -51,10 +51,10 @@ std::string gameStateNameToDoorName(GameState state) {
 
 class GameStateManager {
 private:
-    static GameStateManager* instance;
     GameState currentGameState = INITIAL_ROOM;
     RoomState currentRoomState = RoomState::Order;
     bool transitioning = false;
+    bool restoredFromSave = false;
 
     std::map<std::pair<GameState, RoomState>, std::function<void()>> stateActions;
     unique_ptr<DialogueManager> dialogueManager;
@@ -184,10 +184,22 @@ private:
 
 public:
     static GameStateManager& GetInstance() {
-        if (!instance) {
-            instance = new GameStateManager();
+        static GameStateManager instance;
+        return instance;
+    }
+
+    static GameState GetNextGameState(GameState state) {
+        switch (state) {
+        case GameState::ROOM1_STATE:
+            return GameState::ROOM3_STATE;
+        case GameState::ROOM3_STATE:
+            return GameState::ROOM2_STATE;
+        case GameState::ROOM2_STATE:
+            return GameState::ROOM4_STATE;
+        case GameState::ROOM4_STATE:
+        default:
+            return GameState::END_STATE;
         }
-        return *instance;
     }
 
     void Update() {
@@ -215,19 +227,40 @@ public:
         }
     }
 
-    ~GameStateManager() {
-        delete instance;
-    }
+    ~GameStateManager() = default;
 
     void SetGameState(GameState state) {
         currentGameState = state;
         //ExecuteStateAction();
+    }
+
+    void RestoreFromSave(GameState gameState, RoomState roomState) {
+        if (roomState == RoomState::End && gameState != GameState::END_STATE) {
+            currentGameState = GetNextGameState(gameState);
+            currentRoomState = currentGameState == GameState::END_STATE ? RoomState::End : RoomState::Order;
+        }
+        else if (gameState != GameState::END_STATE) {
+            currentGameState = gameState;
+            currentRoomState = RoomState::Order;
+        }
+        else {
+            currentGameState = gameState;
+            currentRoomState = roomState;
+        }
+
+        Application::Get().ClearAllTimers();
+        Timer::GetInstance().stop();
+        BellManager::GetInstance().StopAllRinging();
+        OrderData::GetInstance().ClearOrder();
+        KitchenData::GetInstance()->clearPlate();
+        restoredFromSave = true;
     }
         
     void Reset() {
         dialogueManager.reset();
 		currentGameState = INITIAL_ROOM;
 		currentRoomState = RoomState::Order;
+        restoredFromSave = false;
         std::cout << "Resetting game state to initial state." << std::endl;
 
 	}
@@ -245,6 +278,10 @@ public:
         return currentRoomState;
     }
 
+    bool WasRestoredFromSave() const {
+        return restoredFromSave;
+    }
+
     void ExecuteStateAction() {
         auto key = std::make_pair(currentGameState, currentRoomState);
         if (stateActions.find(key) != stateActions.end()) {
@@ -252,5 +289,3 @@ public:
         }
     }
 };
-
-GameStateManager* GameStateManager::instance = nullptr;

@@ -92,6 +92,7 @@ public:
     void SetPlayerSpyChoice(Cabin spyChoice);
     void SetPlayerBombLocationInternal(Location bombLocation);
     void SetPlayerBombLocation(Location bombLocation);
+    void updateCurrentEvidenceOptions(DeferredRenderObject *buttonObj, bool resetEvidenceSelection);
     void resetCurrentEvidenceOptions(DeferredRenderObject *buttonObj);
     bool AllChoicesPicked();
     bool GetClueState(Cabin cabin, int clueIndex) const;

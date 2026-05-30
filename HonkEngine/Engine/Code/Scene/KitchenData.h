@@ -14,10 +14,8 @@ public:
 
 	static KitchenData* GetInstance() {
 
-		if (instance == nullptr) {
-			instance = new KitchenData();
-		}
-		return instance;
+		static KitchenData instance;
+		return &instance;
 
 	}
 
@@ -50,8 +48,6 @@ public:
 
 private:
 
-	static KitchenData* instance;
-
 	KitchenData() {
 
 		sandwichChoice = SANDWICH_EMPTY;
@@ -67,5 +63,3 @@ private:
 	Optional optionalChoice;
 
 };
-
-KitchenData* KitchenData::instance = nullptr;

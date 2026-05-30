@@ -13,6 +13,7 @@
 #include "../PopupWidget/PauseMenu.h"
 
 #include "../Application.h"
+#include "../GameStateManager.h"
 
 
 class MainMenu : public Scene {
@@ -184,6 +185,7 @@ private:
 		if (!transitioning) {
 			transitioning = true;
 			//transitioning = true;
+			GameStateManager::GetInstance().Reset();
             JournalSaveSystem::GetInstance().DeleteSaveFile("savegame.xml");
 			AudioManager::GetInstance().PlaySound("buttonClick2");
 			transitionEffects->FadeOut(2.0f, [this]() {
@@ -203,6 +205,7 @@ private:
             transitionEffects->FadeOut(2.0f,
                 [this]()
                 {
+                    JournalSaveSystem::GetInstance().LoadJournalData("savegame.xml");
                     Application::Get().SetScene("Hallway");
                     // Application::Get().SetScene("JournalEntry");
                 });

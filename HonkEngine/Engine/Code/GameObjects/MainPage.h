@@ -256,6 +256,9 @@ public:
 		// Update bomb location UI
 		UpdateBombLocation(data.player_BombLocation);
 
+		m_journalData->updateCurrentEvidenceOptions(evidenceButtonDeferred, false);
+		m_journalData->setCurrentEvidencetext(EvidenceButton);
+
 	}
 
 	void UpdateSpyChoice(Cabin cabin) {

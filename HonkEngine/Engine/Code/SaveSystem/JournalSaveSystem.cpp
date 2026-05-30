@@ -1,6 +1,7 @@
 #include "JournalSaveSystem.h"
 #include "../GameObjects/JournalData.h"
 #include "../Application.h"
+#include "../GameStateManager.h"
 #include "../Dialogue/tinyxml2.h"
 #include <iostream>
 
@@ -28,11 +29,11 @@ bool JournalSaveSystem::SaveJournalData(const std::string &filepath)
     root->InsertEndChild(progression);
 
     XMLElement *gameState = doc.NewElement("CurrentGameState");
-    gameState->SetText(0);
+    gameState->SetText(static_cast<int>(GameStateManager::GetInstance().getGameState()));
     progression->InsertEndChild(gameState);
 
     XMLElement *roomState = doc.NewElement("CurrentRoomState");
-    roomState->SetText(0);
+    roomState->SetText(static_cast<int>(GameStateManager::GetInstance().getRoomState()));
     progression->InsertEndChild(roomState);
 
     Camera &camera = Application::GetCamera();
@@ -167,8 +168,17 @@ bool JournalSaveSystem::LoadJournalData(const std::string &filepath)
     XMLElement *progression = root->FirstChildElement("Progression");
     if (progression)
     {
+        XMLElement *gameStateElem = progression->FirstChildElement("CurrentGameState");
+        XMLElement *roomStateElem = progression->FirstChildElement("CurrentRoomState");
         XMLElement *playerXElem = progression->FirstChildElement("PlayerX");
         XMLElement *playerYElem = progression->FirstChildElement("PlayerY");
+
+        if (gameStateElem && roomStateElem)
+        {
+            GameState savedGameState = static_cast<GameState>(gameStateElem->IntText(static_cast<int>(INITIAL_ROOM)));
+            RoomState savedRoomState = static_cast<RoomState>(roomStateElem->IntText(static_cast<int>(RoomState::Order)));
+            GameStateManager::GetInstance().RestoreFromSave(savedGameState, savedRoomState);
+        }
 
         if (playerXElem && playerYElem)
         {
@@ -216,7 +226,7 @@ bool JournalSaveSystem::LoadJournalData(const std::string &filepath)
 
                 if (val)
                 {
-                    journal->ActivateClue(cabinId, index);
+                    journal->clueStates[cabinId][index] = true;
                 }
 
                 clueElem = clueElem->NextSiblingElement("Clue");
@@ -390,22 +400,27 @@ bool JournalSaveSystem::LoadJournalClues(const std::string &filepath)
         // Clear out any old session clues before writing the loaded ones
         journal->clueStates.clear();
 
-        // 2. REVERSE OPERATION Loop: Look through every child element inside <ClueStates>
-        for (tinyxml2::XMLElement *clueElem = clueStatesNode->FirstChildElement(); clueElem != nullptr;
-            clueElem = clueElem->NextSiblingElement())
+        for (tinyxml2::XMLElement *cabinElem = clueStatesNode->FirstChildElement("Cabin"); cabinElem != nullptr;
+            cabinElem = cabinElem->NextSiblingElement("Cabin"))
         {
-            // Read attributes/text from the XML element
-            // (Assuming your XML saves elements with attributes like: <Clue cabin="0" index="3" active="true"/>)
-            int cabinVal = clueElem->IntAttribute("cabin", static_cast<int>(CABIN_EMPTY));
-            int clueIndex = clueElem->IntAttribute("index", -1);
-            bool isActive = clueElem->BoolAttribute("active", false);
-
-            if (clueIndex != -1 && cabinVal != static_cast<int>(CABIN_EMPTY))
+            int cabinVal = cabinElem->IntAttribute("id", static_cast<int>(CABIN_EMPTY));
+            if (cabinVal == static_cast<int>(CABIN_EMPTY))
             {
-                Cabin loadedCabin = static_cast<Cabin>(cabinVal);
+                continue;
+            }
 
-                // Directly set the boolean data back into your inner memory map structure!
-                journal->clueStates[loadedCabin][clueIndex] = isActive;
+            Cabin loadedCabin = static_cast<Cabin>(cabinVal);
+
+            for (tinyxml2::XMLElement *clueElem = cabinElem->FirstChildElement("Clue"); clueElem != nullptr;
+                clueElem = clueElem->NextSiblingElement("Clue"))
+            {
+                int clueIndex = clueElem->IntAttribute("index", -1);
+                bool isActive = clueElem->BoolText(false);
+
+                if (clueIndex != -1)
+                {
+                    journal->clueStates[loadedCabin][clueIndex] = isActive;
+                }
             }
         }
 

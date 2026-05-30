@@ -94,6 +94,44 @@ private:
 	bool moveTextOn = true;
 
 	PauseMenu pauseMenu;
+
+	void SetAllDoorPermissions(bool permitted) {
+		room1Door->setPermission(permitted);
+		room2Door->setPermission(permitted);
+		room3Door->setPermission(permitted);
+		room4Door->setPermission(permitted);
+		kitchenDoor->setPermission(permitted);
+	}
+
+	void ApplyProgressionStateToHallway() {
+		SetAllDoorPermissions(false);
+
+		GameState currentGameState = gameStateManager.getGameState();
+		RoomState currentRoomState = gameStateManager.getRoomState();
+
+		if (currentRoomState == RoomState::Prepare) {
+			if (KitchenData::GetInstance()->checkCompletePlate()) {
+				Door* targetDoor = DoorManager::GetInstance().GetDoorByName(gameStateNameToDoorName(currentGameState));
+				if (targetDoor) {
+					targetDoor->setPermission(true);
+				}
+			}
+			else {
+				kitchenDoor->setPermission(true);
+			}
+		}
+		else if (currentRoomState == RoomState::Serve ||
+			currentRoomState == RoomState::Score ||
+			currentRoomState == RoomState::MealReact ||
+			currentRoomState == RoomState::InspectionStart ||
+			currentRoomState == RoomState::Inspection ||
+			currentRoomState == RoomState::InspectionEnd) {
+			Door* targetDoor = DoorManager::GetInstance().GetDoorByName(gameStateNameToDoorName(currentGameState));
+			if (targetDoor) {
+				targetDoor->setPermission(true);
+			}
+		}
+	}
 	
 public:
 	Hallway() :audioManager(AudioManager::GetInstance())
@@ -367,6 +405,13 @@ public:
 		if (!audioManager.IsSoundPlaying("trainAmbience"))
 			audioManager.PlaySound("trainAmbience", true);
 
+		if (gameStateManager.WasRestoredFromSave()) {
+			firstEntry = false;
+			moveTextOn = false;
+			pressA = true;
+			pressD = true;
+		}
+
 		if (firstEntry) {
 			tutorialText->setActiveStatus(true);
 			journalArrow->setActiveStatus(false);
@@ -386,6 +431,7 @@ public:
 		GameState currentGameState = gameStateManager.getGameState();
 		RoomState currentRoomState = gameStateManager.getRoomState();
 
+		ApplyProgressionStateToHallway();
 
 		transitionEffects->FadeIn(2.0f, [this]() {});
 
@@ -403,7 +449,11 @@ public:
 					Application::Get().SetScene("JournalEntry");
 				});
 		}
-		else if (currentGameState == GameState::ROOM1_STATE && currentRoomState == RoomState::Prepare)
+		else if ((currentGameState == GameState::ROOM1_STATE ||
+			currentGameState == GameState::ROOM2_STATE ||
+			currentGameState == GameState::ROOM3_STATE ||
+			currentGameState == GameState::ROOM4_STATE) &&
+			currentRoomState == RoomState::Prepare)
 		{
 			tutorialText->setActiveStatus(true);
 			if (KitchenData::GetInstance()->checkCompletePlate())
@@ -419,8 +469,6 @@ public:
 		//Reset/Hide The Pause Menu
 		pauseMenu.Hide();
         player->LoadPosition();
-        JournalSaveSystem::GetInstance().LoadJournalMainPage();
-        JournalSaveSystem::GetInstance().LoadJournalClues();
 
 
 		entering = false;

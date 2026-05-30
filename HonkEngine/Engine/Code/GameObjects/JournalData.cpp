@@ -21,12 +21,20 @@ JournalData *JournalData::GetInstance()
 
 void JournalData::incrementEvidence()
 {
-    main_page.player_Evidence = (main_page.player_Evidence + 1) % 2;
+    no_of_Evidence = static_cast<int>(allCabinData[main_page.player_Spy].activeEvidence.size());
+    int evidenceChoiceCount = no_of_Evidence > 2 ? 2 : no_of_Evidence;
+    if (evidenceChoiceCount <= 1)
+    {
+        main_page.player_Evidence = 0;
+        return;
+    }
+
+    main_page.player_Evidence = (main_page.player_Evidence + 1) % evidenceChoiceCount;
 }
 
 void JournalData::setCurrentEvidencetext(UIButton *evidenceButton)
 {
-    no_of_Evidence = allCabinData[main_page.player_Spy].activeEvidence.size();
+    no_of_Evidence = static_cast<int>(allCabinData[main_page.player_Spy].activeEvidence.size());
     if (no_of_Evidence == 0)
     {
         evidenceButton->SetButtonText("EMPTY");
@@ -37,6 +45,11 @@ void JournalData::setCurrentEvidencetext(UIButton *evidenceButton)
     }
     else
     {
+        int evidenceChoiceCount = no_of_Evidence > 2 ? 2 : no_of_Evidence;
+        if (main_page.player_Evidence < 0 || main_page.player_Evidence >= evidenceChoiceCount)
+        {
+            main_page.player_Evidence = 0;
+        }
         evidenceButton->SetButtonText(mainPageEvidence[main_page.player_Evidence]);
     }
 }
@@ -63,10 +76,10 @@ void JournalData::SetPlayerBombLocation(Location bombLocation)
     NotifyObservers();
 }
 
-void JournalData::resetCurrentEvidenceOptions(DeferredRenderObject *buttonObj)
+void JournalData::updateCurrentEvidenceOptions(DeferredRenderObject *buttonObj, bool resetEvidenceSelection)
 {
     Cabin spy_choice = main_page.player_Spy;
-    no_of_Evidence = allCabinData[spy_choice].activeEvidence.size();
+    no_of_Evidence = static_cast<int>(allCabinData[spy_choice].activeEvidence.size());
 
     if (no_of_Evidence == 0)
     {
@@ -89,7 +102,17 @@ void JournalData::resetCurrentEvidenceOptions(DeferredRenderObject *buttonObj)
         mainPageEvidence[0] = allCabinData[spy_choice].activeEvidence.at(0);
         mainPageEvidence[1] = allCabinData[spy_choice].activeEvidence.at(1);
     }
-    main_page.player_Evidence = 0;
+
+    int evidenceChoiceCount = no_of_Evidence > 2 ? 2 : no_of_Evidence;
+    if (resetEvidenceSelection || main_page.player_Evidence < 0 || main_page.player_Evidence >= evidenceChoiceCount)
+    {
+        main_page.player_Evidence = 0;
+    }
+}
+
+void JournalData::resetCurrentEvidenceOptions(DeferredRenderObject *buttonObj)
+{
+    updateCurrentEvidenceOptions(buttonObj, true);
 }
 
 bool JournalData::AllChoicesPicked()
@@ -220,8 +243,6 @@ void JournalData::ResetJournalData()
 
     allCabinData.clear();
     clueStates.clear();
-    evidenceMap.clear();
-
     mainPageEvidence[0] = " - ";
     mainPageEvidence[1] = " - ";
     no_of_Evidence = 0;

@@ -46,7 +46,7 @@ struct Dialogue {
     
 };
 
-Cabin GetCabinFromString(const string& cabinStr) {
+inline Cabin GetCabinFromString(const string& cabinStr) {
     static const map<string, Cabin> cabinMap = {
         {"CABIN1", CABIN1},
         {"CABIN21", CABIN21},
