@@ -38,6 +38,6 @@ jobs:
           echo "$CHANGED_FILES"
 
           echo "$CHANGED_FILES" | xargs clang-format --dry-run --Werror \
-            --style=file:HonkEngine/Engine/.clang-format
+            --style=file:HonkEngine/.clang-format
 
           echo "All changed files pass formatting check!"
