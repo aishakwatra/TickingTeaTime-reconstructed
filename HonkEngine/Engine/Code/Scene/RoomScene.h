@@ -98,7 +98,7 @@ public:
         OnPreStateUpdate(dt);
         UpdateDialogueProgress();
         HandleInstructionVisibility(dt);
-        HandleKeyInputs();
+        HandleKeyInputs(dt);
     }
 
     /// @brief Render the scene and dialogue.
@@ -384,9 +384,16 @@ protected:
         }
     }
 
-    /// @brief Handles Space/Mouse input to advance dialogue, and Escape for pause.
-    void HandleKeyInputs()
+    /// @brief Handles input — Space/Mouse advance dialogue,
+    ///        hold Left Ctrl to fast forward (stops at choices),
+    ///        Escape to show pause menu.
+    /// @param dt Delta time in seconds.
+    /// @pre   dt >= 0
+    void HandleKeyInputs(float dt)
     {
+        assert(dt >= 0.0f && "HandleKeyInputs: dt must be non-negative");
+
+        // Normal single advance — Space, Left click, or choice clicked
         if ((input.Get().GetKeyDown(GLFW_KEY_SPACE) || input.Get().GetMouseButtonDown(0) ||
                 dialogueManager->isChoicesClicked()) &&
             !pauseMenu.IsVisible())
@@ -394,6 +401,25 @@ protected:
             dialogueManager->PlayNextDialogue();
             HideInstruction();
             dialogueManager->setChoicesClicked(false);
+            fastForwardTimer = 0.0f;
+        }
+
+        // Fast forward — hold Left Ctrl, stops at choices
+        if (ShouldFastForward(input.Get().GetKey(GLFW_KEY_LEFT_CONTROL), pauseMenu.IsVisible(),
+                dialogueManager->IsCurrentDialogueQuestion()))
+        {
+            fastForwardTimer -= dt;
+            if (fastForwardTimer <= 0.0f)
+            {
+                dialogueManager->PlayNextDialogue();
+                HideInstruction();
+                fastForwardTimer = kFastForwardInterval;
+            }
+        }
+        else
+        {
+            // Reset timer when not fast forwarding
+            fastForwardTimer = 0.0f;
         }
 
         if (input.Get().GetKeyDown(GLFW_KEY_ESCAPE))
@@ -549,4 +575,24 @@ protected:
 
 private:
     static constexpr float kInstructionResetTime = 8.0f;
+    static constexpr float kFastForwardInterval = 0.05f; // seconds between advances
+
+    float fastForwardTimer = 0.0f; // countdown between fast forward advances
+
+    /// @brief Returns true when fast forward should fire.
+    /// @param ctrlHeld         True if Left Ctrl is currently held.
+    /// @param isPaused         True if pause menu is visible.
+    /// @param isChoiceDialogue True if current dialogue is a choice prompt.
+    /// @pre   none
+    /// @post  false if any blocking condition is true
+    static bool ShouldFastForward(bool ctrlHeld, bool isPaused, bool isChoiceDialogue)
+    {
+        if (!ctrlHeld)
+            return false;
+        if (isPaused)
+            return false;
+        if (isChoiceDialogue)
+            return false;
+        return true;
+    }
 };
