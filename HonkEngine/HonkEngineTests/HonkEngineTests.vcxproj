@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="catch2\catch_amalgamated.cpp" />
     <ClCompile Include="TestCharacterData.cpp" />
+    <ClCompile Include="TestDialogueSkip.cpp" />
     <ClCompile Include="TestGameStateManager.cpp" />
     <ClCompile Include="TestKitchenData.cpp" />
     <ClCompile Include="TestMain.cpp" />

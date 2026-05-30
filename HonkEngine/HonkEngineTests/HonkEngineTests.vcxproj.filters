@@ -30,6 +30,9 @@
     <ClCompile Include="TestGameStateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestDialogueSkip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catch2\catch_amalgamated.hpp">
